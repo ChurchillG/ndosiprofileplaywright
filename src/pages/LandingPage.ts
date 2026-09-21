@@ -12,7 +12,7 @@ export class LandingPage extends BasePage {
   }
 
   private get loginButton() {
-    return this.page.getByRole('button', { name: /log in|login/i });
+    return this.page.getByRole('button', { name: /🔑 Login/i});
   }
 
   async open(): Promise<void> {
