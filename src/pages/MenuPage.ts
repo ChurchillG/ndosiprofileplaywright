@@ -11,13 +11,13 @@ export class MenuPage extends BasePage {
   }
 
   private get menuButton() {
-    return this.page.getByRole('button', { name: /menu/i });
+    return this.page.getByRole('button', { name: /Menu/i });
   }
 
   private get myProfileOption() {
     return this.page
       .getByRole('menuitem', { name: /my profile/i })
-      .or(this.page.getByRole('link', { name: /my profile/i }));
+      .or(this.page.getByRole('link', { name: /👤 My Profile/i }));
   }
 
   async openMenu(): Promise<void> {
