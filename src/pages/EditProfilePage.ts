@@ -11,7 +11,7 @@ export class EditProfilePage extends BasePage {
   }
 
   private get choosePhotoButton() {
-    return this.page.getByRole('button', { name: /choose photo|upload photo/i });
+    return this.page.getByRole('button', { name: /📷 Choose Photo/i });
   }
 
   private get fileInput() {
@@ -19,7 +19,7 @@ export class EditProfilePage extends BasePage {
   }
 
   private get saveChangesButton() {
-    return this.page.getByRole('button', { name: /save changes/i });
+    return this.page.getByRole('button', { name: /💾 Save Changes/i });
   }
 
   /**
