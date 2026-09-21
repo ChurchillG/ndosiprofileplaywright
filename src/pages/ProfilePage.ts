@@ -7,7 +7,7 @@ export class ProfilePage extends BasePage {
   }
 
   private get editProfileButton() {
-    return this.page.getByRole('button', { name: /edit profile/i });
+    return this.page.getByRole('button', { name: /✏️ Edit Profile/i });
   }
 
   private get profilePicture() {
