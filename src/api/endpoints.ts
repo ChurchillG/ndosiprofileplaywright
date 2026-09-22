@@ -1,8 +1,7 @@
 export const ENDPOINTS = {
-  login: '/api/auth/login',
-  getProfile: '/api/profile',
-  updateProfile: '/api/profile',
-  uploadProfilePicture: '/api/profile/picture',
+  login: '/login',
+  getProfile: '/profile',
+  updateProfile: '/profile', // PUT — also handles the profile picture update
 } as const;
 
 export type EndpointKey = keyof typeof ENDPOINTS;
