@@ -1,6 +1,7 @@
 import path from 'path';
 import { test, expect } from '../../src/fixtures/test-base';
 import { step, attachScreenshot } from '../../src/utils/allure-helpers';
+import { attachNetworkLogger } from '../../src/utils/network-logger';// ← ADD THIS IMPORT
 
 const NEW_PICTURE_PATH = path.resolve(__dirname, '../../test-data/MG_29_Churchill.jpg');
 
@@ -10,6 +11,8 @@ test.describe('Profile picture update', () => {
     credentials,
     profileFeature,
   }) => {
+     const logged = attachNetworkLogger(page);// ← ADD THIS LINE (right at the start)
+
     await step('Log in to the Ndosi automation test site', async () => {
       await profileFeature.loginToSite(credentials);
     });
@@ -32,5 +35,7 @@ test.describe('Profile picture update', () => {
     });
 
     expect(updatedSrc).toBeTruthy();
+
+    console.log(JSON.stringify(logged, null, 2)); // ← ADD THIS LINE (right at the end)
   });
 });

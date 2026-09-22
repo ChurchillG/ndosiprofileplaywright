@@ -19,7 +19,7 @@ export class LoginPage extends BasePage {
   }
 
   private get loginButton() {
-    return this.page.locator('#login-button');
+    return this.page.getByRole('button', { name: /Login/i });
   }
 
   async enterUsername(username: string): Promise<void> {

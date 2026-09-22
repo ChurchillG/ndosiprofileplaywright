@@ -15,10 +15,8 @@ export class MenuPage extends BasePage {
   }
 
   private get myProfileOption() {
-    return this.page
-      .getByRole('menuitem', { name: /my profile/i })
-      .or(this.page.getByRole('link', { name: /👤 My Profile/i }));
-  }
+  return this.page.getByRole('button', { name: /My Profile/i });
+}
 
   async openMenu(): Promise<void> {
     await this.click(this.menuButton);
