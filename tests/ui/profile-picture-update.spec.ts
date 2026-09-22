@@ -2,7 +2,7 @@ import path from 'path';
 import { test, expect } from '../../src/fixtures/test-base';
 import { step, attachScreenshot } from '../../src/utils/allure-helpers';
 
-const NEW_PICTURE_PATH = path.resolve(__dirname, '../../test-data/new-profile-picture.jpg');
+const NEW_PICTURE_PATH = path.resolve(__dirname, '../../test-data/MG_29_Churchill.jpg');
 
 test.describe('Profile picture update', () => {
   test('user can log in, edit their profile, and upload a new picture', async ({
