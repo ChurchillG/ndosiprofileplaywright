@@ -7,19 +7,28 @@ test('discover save/upload endpoint', async ({ page, credentials, profileFeature
   await profileFeature.loginToSite(credentials);
   await profileFeature.navigateToEditProfile();
 
-  // Start waiting for any response whose URL contains "profile" BEFORE
-  // triggering the upload+save, so we don't miss it even if it fires fast.
-  const responsePromise = page.waitForResponse(
-    (response) => response.url().includes('profile'),
-    { timeout: 15_000 },
-  );
-
-  await profileFeature.updateProfilePicture(NEW_PICTURE_PATH);
-
-  const response = await responsePromise;
-  console.log('Save/upload response:', {
-    method: response.request().method(),
-    url: response.url(),
-    status: response.status(),
+  // Log EVERY request from here on.
+  page.on('request', (request) => {
+    console.log('REQUEST:', request.method(), request.url(), '| content-type:', request.headers()['content-type'] ?? '(none)');
   });
+
+  // Capture the picture URL before doing anything.
+  const pictureBefore = await page.locator('div[style*="profile-images"]').first().getAttribute('style');
+  console.log('Picture BEFORE:', pictureBefore?.match(/url\(["']?(.*?)["']?\)/)?.[1]);
+
+  const fileChooserPromise = page.waitForEvent('filechooser');
+  await page.getByText(/📷 Choose Photo/i).click();
+  const fileChooser = await fileChooserPromise;
+  await fileChooser.setFiles(NEW_PICTURE_PATH);
+
+  await page.waitForTimeout(1000);
+
+  // Screenshot right after selection, before Save.
+  await page.screenshot({ path: 'test-results/after-filechooser-select.png', fullPage: true });
+
+  await page.getByRole('button', { name: /💾 Save Changes/i }).click();
+  await page.waitForTimeout(2000);
+
+  const pictureAfter = await page.locator('div[style*="profile-images"]').first().getAttribute('style');
+  console.log('Picture AFTER save:', pictureAfter?.match(/url\(["']?(.*?)["']?\)/)?.[1]);
 });
