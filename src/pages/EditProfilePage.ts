@@ -10,12 +10,12 @@ export class EditProfilePage extends BasePage {
     super(page);
   }
 
-  private get choosePhotoButton() {
-    return this.page.getByRole('button', { name: /📷 Choose Photo/i });
+  private get choosePhotoLabel() {
+    return this.page.getByText(/📷 Choose Photo/i);
   }
 
   private get fileInput() {
-    return this.page.locator('input[type="file"]');
+    return this.page.locator('#profilePicture');
   }
 
   private get saveChangesButton() {
@@ -30,18 +30,18 @@ export class EditProfilePage extends BasePage {
    * The workaround (and the standard Playwright pattern for file
    * uploads) is: you don't actually need to click the visible button
    * at all. Underneath it, the page always has a real
-   * <input type="file"> element — normally hidden with CSS and
-   * triggered by that button. Playwright can set a file directly on
-   * that hidden input via setInputFiles(), which achieves the exact
-   * same end result (the file becomes "selected") without ever
-   * opening a dialog.
+   * <input type="file"> element — here it has id="profilePicture",
+   * linked to the visible "Choose Photo" label via for="profilePicture".
+   * Playwright can set a file directly on that hidden input via
+   * setInputFiles(), which achieves the exact same end result (the
+   * file becomes "selected") without ever opening a dialog.
    *
    * uploadProfilePicture() below does that directly. This method is
-   * kept only if you want to assert the button is visible/clickable
+   * kept only if you want to assert the label is visible/clickable
    * as part of the flow.
    */
   async clickChoosePhoto(): Promise<void> {
-    await this.waitForVisible(this.choosePhotoButton);
+    await this.waitForVisible(this.choosePhotoLabel);
   }
 
   async uploadProfilePicture(filePath: string): Promise<void> {

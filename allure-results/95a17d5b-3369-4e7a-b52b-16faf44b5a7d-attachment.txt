@@ -1,0 +1,62 @@
+[
+  {
+    "method": "GET",
+    "url": "https://www.ndosiautomation.co.za/APIDEV/groups",
+    "status": 200
+  },
+  {
+    "method": "POST",
+    "url": "https://www.ndosiautomation.co.za/APIDEV/login",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.ndosiautomation.co.za/APIDEV/profile",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.ndosiautomation.co.za/APIDEV/my-enrollments",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.ndosiautomation.co.za/APIDEV/my-instructors/today",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.ndosiautomation.co.za/APIDEV/student/today",
+    "status": 404
+  },
+  {
+    "method": "GET",
+    "url": "https://www.ndosiautomation.co.za/APIDEV/my-instructor-tasks",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.ndosiautomation.co.za/APIDEV/profile",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.ndosiautomation.co.za/APIDEV/profile",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.ndosiautomation.co.za/APIDEV/profile",
+    "status": 200
+  },
+  {
+    "method": "GET",
+    "url": "https://www.ndosiautomation.co.za/APIDEV/my-testimonials",
+    "status": 200
+  },
+  {
+    "method": "PUT",
+    "url": "https://www.ndosiautomation.co.za/APIDEV/profile",
+    "status": 200
+  }
+]

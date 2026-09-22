@@ -11,7 +11,12 @@ export class ProfilePage extends BasePage {
   }
 
   private get profilePicture() {
-    return this.page.locator('[data-testid="profile-picture"], img.profile-picture');
+    // The profile picture renders as a <div> with a CSS
+    // background-image (not an <img> tag), and has no id/class/alt.
+    // It can appear twice on screen at once (e.g. a summary card plus
+    // the edit section), so we take the first match — both point at
+    // the same image URL regardless.
+    return this.page.locator('div[style*="profile-images"]').first();
   }
 
   async clickEditProfile(): Promise<void> {
@@ -20,6 +25,11 @@ export class ProfilePage extends BasePage {
 
   async getProfilePictureSrc(): Promise<string | null> {
     await this.waitForVisible(this.profilePicture);
-    return this.profilePicture.getAttribute('src');
+    const style = await this.profilePicture.getAttribute('style');
+    if (!style) return null;
+
+    // Pull the URL out of: background: url("...") center center / cover...
+    const match = style.match(/url\(["']?(.*?)["']?\)/);
+    return match ? match[1] : null;
   }
 }
