@@ -12,8 +12,7 @@ export default defineConfig({
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  workers: process.env.CI ? 1 : undefined,
-
+  workers: 1,
   reporter: [
     ['list'],
     [
@@ -42,9 +41,9 @@ export default defineConfig({
     },
     {
       name: 'api',
-      testDir: './tests/api',
-      use: {
-        baseURL: process.env.API_BASE_URL ?? process.env.BASE_URL ?? 'https://ndosisimplifiedautomation.vercel.app',
+  testDir: './tests/api',
+  use: {
+    baseURL: process.env.API_BASE_URL ?? 'https://www.ndosiautomation.co.za/APIDEV/',
       },
     },
   ],
