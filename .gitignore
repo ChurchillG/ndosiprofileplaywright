@@ -9,3 +9,9 @@ node_modules/
 .env
 allure-results/
 reports/
+test-data/login-credentials.csv
+allure-results/
+allure-report/
+reports/
+test-results/
+playwright-report/
