@@ -1,5 +1,10 @@
 import { Page, Locator, expect } from '@playwright/test';
 
+/**
+ * BasePage centralizes generic page interactions (navigation, waiting,
+ * clicking, typing) so every Page Object can extend it instead of
+ * repeating Playwright boilerplate.
+ */
 export class BasePage {
   readonly page: Page;
 
@@ -8,7 +13,9 @@ export class BasePage {
   }
 
   async goto(path: string = '/'): Promise<void> {
-    await this.page.goto(path);
+    // 'domcontentloaded' instead of the default 'load', so one slow
+    // image/font/third-party request can't stall the whole navigation.
+    await this.page.goto(path, { waitUntil: 'domcontentloaded' });
   }
 
   async click(locator: Locator): Promise<void> {
