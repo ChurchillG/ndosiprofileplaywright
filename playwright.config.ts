@@ -13,6 +13,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   workers: 1,
+
   reporter: [
     ['list'],
     [
@@ -41,9 +42,9 @@ export default defineConfig({
     },
     {
       name: 'api',
-  testDir: './tests/api',
-  use: {
-    baseURL: process.env.API_BASE_URL ?? 'https://www.ndosiautomation.co.za/APIDEV/',
+      testDir: './tests/api',
+      use: {
+        baseURL: process.env.API_BASE_URL ?? 'https://www.ndosiautomation.co.za/APIDEV/',
       },
     },
   ],

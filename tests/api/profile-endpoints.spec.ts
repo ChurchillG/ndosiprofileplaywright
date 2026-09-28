@@ -10,10 +10,8 @@ import { ApiClient } from '../../src/api/ApiClient';
  * Validates the real endpoints discovered while running the UI flow.
  *
  * Logs in ONCE for the whole file (test.beforeAll) and reuses the same
- * token across every test. The dedicated "login" test asserts on that
- * same beforeAll response rather than logging in again — the site
- * appears to enforce a single active session per user, so a second
- * login call invalidates the first token, breaking every test after it.
+ * token across every test. The site enforces a single active session
+ * per user, so a second login would invalidate the first token.
  */
 test.describe('Profile endpoints - status code validation', () => {
   let sharedToken: string;
@@ -39,9 +37,6 @@ test.describe('Profile endpoints - status code validation', () => {
   });
 
   test('login endpoint returns 200', async () => {
-    // Asserts on the single login performed in beforeAll — does NOT
-    // log in again, to avoid invalidating the shared session token
-    // used by every other test in this file.
     expect(loginStatus).toBe(200);
   });
 
@@ -84,9 +79,6 @@ test.describe('Profile endpoints - status code validation', () => {
         },
       }),
     );
-
-    console.log('Upload response status:', response.status());
-    console.log('Upload response body:', await response.text());
 
     expect(response.status()).toBe(200);
   });

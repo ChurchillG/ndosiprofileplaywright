@@ -5,16 +5,10 @@ import { BasePage } from '../helpers/BasePage';
  * Represents the Edit Profile screen: choosing a new photo and saving
  * the change.
  *
- * KNOWN LIMITATION (documented after investigation): this site's file
- * input does not appear to update its internal application state when
- * a file is selected via Playwright automation — even using a real
- * click on the linked <label>, a genuine native filechooser event, and
- * manually dispatched input/change events. The "Save Changes" submit
- * always re-sends the previously stored picture path rather than the
- * newly selected file. This was confirmed not to be a timing, network,
- * or automation-locator issue (see README "Known Issues" section for
- * the full investigation). The interaction below still reflects the
- * correct, standard Playwright pattern for file uploads.
+ * The site compresses the chosen image client-side ("compressed below
+ * 3MB before upload") and only then registers it in the app's state.
+ * Clicking Save before that finishes submits without the new picture,
+ * so we pause briefly after selecting the file.
  */
 export class EditProfilePage extends BasePage {
   constructor(page: Page) {
@@ -23,10 +17,6 @@ export class EditProfilePage extends BasePage {
 
   private get choosePhotoLabel() {
     return this.page.locator('label[for="profilePicture"]');
-  }
-
-  private get fileInput() {
-    return this.page.locator('#profilePicture');
   }
 
   private get saveChangesButton() {
@@ -38,6 +28,9 @@ export class EditProfilePage extends BasePage {
     await this.click(this.choosePhotoLabel);
     const fileChooser = await fileChooserPromise;
     await fileChooser.setFiles(filePath);
+
+    // Give the client-side compression time to finish before saving.
+    await this.page.waitForTimeout(3000);
   }
 
   async clickSaveChanges(): Promise<void> {

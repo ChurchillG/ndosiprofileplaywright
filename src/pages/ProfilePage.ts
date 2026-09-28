@@ -7,15 +7,14 @@ export class ProfilePage extends BasePage {
   }
 
   private get editProfileButton() {
-    return this.page.getByRole('button', { name: /✏️ Edit Profile/i });
+    // Match on the words only. The button text also has an emoji, but
+    // emoji in a regex can silently stop matching after a file re-save.
+    return this.page.getByRole('button', { name: /edit profile/i });
   }
 
   private get profilePicture() {
-    // The profile picture renders as a <div> with a CSS
-    // background-image (not an <img> tag), and has no id/class/alt.
-    // It can appear twice on screen at once (e.g. a summary card plus
-    // the edit section), so we take the first match — both point at
-    // the same image URL regardless.
+    // The picture is a <div> with a CSS background-image (not an <img>).
+    // It can appear twice on screen, so we take the first match.
     return this.page.locator('div[style*="profile-images"]').first();
   }
 
@@ -28,7 +27,6 @@ export class ProfilePage extends BasePage {
     const style = await this.profilePicture.getAttribute('style');
     if (!style) return null;
 
-    // Pull the URL out of: background: url("...") center center / cover...
     const match = style.match(/url\(["']?(.*?)["']?\)/);
     return match ? match[1] : null;
   }

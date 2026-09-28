@@ -1,7 +1,6 @@
 import path from 'path';
 import { test, expect } from '../../src/fixtures/test-base';
 import { step, attachScreenshot } from '../../src/utils/allure-helpers';
-import { attachNetworkLogger } from '../../src/utils/network-logger';// ← ADD THIS IMPORT
 
 const NEW_PICTURE_PATH = path.resolve(__dirname, '../../test-data/download.jpeg');
 
@@ -11,8 +10,6 @@ test.describe('Profile picture update', () => {
     credentials,
     profileFeature,
   }) => {
-     const logged = attachNetworkLogger(page);// ← ADD THIS LINE (right at the start)
-
     await step('Log in to the Ndosi automation test site', async () => {
       await profileFeature.loginToSite(credentials);
     });
@@ -21,21 +18,29 @@ test.describe('Profile picture update', () => {
       await profileFeature.navigateToEditProfile();
     });
 
-    await step('Capture profile picture before update', async () => {
+    await step('Capture screen before update', async () => {
       await attachScreenshot(page, 'Before update');
     });
 
-    await step('Upload new profile picture and save', async () => {
+    // Start listening BEFORE saving so the upload response can't be missed.
+    const uploadResponsePromise = page.waitForResponse(
+      (response) =>
+        response.url().includes('/profile/image') && response.request().method() === 'POST',
+    );
+
+    await step('Choose new profile picture and save changes', async () => {
       await profileFeature.updateProfilePicture(NEW_PICTURE_PATH);
     });
 
-    const updatedSrc = await step('Verify profile picture was updated', async () => {
-      await attachScreenshot(page, 'After update');
-      return profileFeature.getUpdatedProfilePictureSrc();
+    const uploadResponse = await step('Wait for the picture upload to complete', async () => {
+      return uploadResponsePromise;
     });
 
-    expect(updatedSrc).toBeTruthy();
+    await step('Capture screen after update', async () => {
+      await page.waitForTimeout(2000);
+      await attachScreenshot(page, 'After update');
+    });
 
-    console.log(JSON.stringify(logged, null, 2)); // ← ADD THIS LINE (right at the end)
+    expect(uploadResponse.status()).toBe(200);
   });
 });
